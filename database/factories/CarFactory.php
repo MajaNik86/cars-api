@@ -24,7 +24,6 @@ class CarFactory extends Factory
             'isAutomatic' => $this->faker->boolean(),
             'engine' => $this->faker->randomElement(['diesel', 'electric', 'petrol', 'hybird']),
             'number_of_doors' =>  $this->faker->numberBetween(2, 10),
-
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -39,7 +40,8 @@ class AuthController extends Controller
             "email" => $validatedData["email"],
             "password" => $validatedData["password"]
         ];
-        $token = auth()->attempt($credentials);
+
+        $token = Auth::attempt($credentials);
 
         if (!$token) {
             return response()->json([
@@ -50,10 +52,27 @@ class AuthController extends Controller
 
         return response()->json([
             "status" => "success",
-            "user" => auth()->user,
+            "user" => Auth::user(),
             "authorization" => [
                 "token" => $token
             ]
+        ]);
+    }
+    public function refresh(Request $request)
+    {
+        return response()->json([
+            "status" => "success",
+            "user" => Auth::user(),
+            "authorization" => [
+                "token" => Auth::refresh()
+            ]
+        ]);
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return response()->json([
+            "status" => "success",
         ]);
     }
 }
